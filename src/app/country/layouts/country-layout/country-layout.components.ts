@@ -5,6 +5,6 @@ import { TopMenuComponent } from '../../components/top-menu/top-menu.component';
 @Component({
   selector: 'app-country-layout',
   imports: [RouterOutlet, TopMenuComponent],
-  templateUrl: './CountryLayout.component.html',
+  templateUrl: './country-layout.component.html',
 })
 export class CountryLayoutComponent {}
