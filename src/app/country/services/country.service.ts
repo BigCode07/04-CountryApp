@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
 import { map, Observable, catchError, throwError, delay } from 'rxjs';
 import { Country } from '../interfaces/country.interface';
-import { CountryMapper } from '../mappers/country.mapper';
+import { CountryMapper } from '../mapping/country.mapper';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -36,10 +36,25 @@ export class CountryService {
 
     return this.http.get<RESTCountry[]>(url).pipe(
       map((resp) => CountryMapper.mapRestCountryArrayToCountryArray(resp)),
-      delay(1000),
+
       catchError((error) => {
         return throwError(
           () => new Error(`No se pudo obtener el pais: ${query}`)
+        );
+      })
+    );
+  }
+
+  searchCountryByCode(code: string) {
+    const url = `${API_URL}/alpha/${code}`;
+
+    return this.http.get<RESTCountry[]>(url).pipe(
+      map((resp) => CountryMapper.mapRestCountryArrayToCountryArray(resp)),
+      map((countries) => countries.at(0)),
+
+      catchError((error) => {
+        return throwError(
+          () => new Error(`No se pudo obtener el pais con ese codigo ${code}`)
         );
       })
     );
